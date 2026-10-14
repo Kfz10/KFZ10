@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101820"><meta name="description" content="Fahrzeug-Deal-Rechner für den österreichischen Fahrzeughandel">
+<link rel="manifest" href="manifest.json">
+<title>Fahrzeug-Deal</title>
+<style>
+:root{color-scheme:dark;--bg:#101820;--panel:#192630;--line:#31424e;--text:#f2f5f7;--muted:#aab8c2;--accent:#77e0b5;--warn:#ffd27d;--bad:#ff8d8d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:24px 18px 18px;background:#0b1218;border-bottom:1px solid var(--line)}header h1{margin:0;font-size:25px}header p{margin:6px 0 0;color:var(--muted);font-size:13px}
+main{max-width:760px;margin:auto;padding:16px;display:grid;gap:14px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}.panel h2{font-size:17px;margin:0 0 12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:flex;flex-direction:column;gap:5px}.field.full{grid-column:1/-1}label{font-size:12px;color:var(--muted)}input,select{width:100%;background:#0e171e;color:var(--text);border:1px solid #40535f;border-radius:10px;padding:12px;font-size:16px;min-width:0}button,.button{border:0;border-radius:11px;padding:12px 14px;background:var(--accent);color:#082117;font-weight:750;font-size:14px;text-decoration:none;display:inline-flex;justify-content:center;align-items:center;cursor:pointer}.secondary{background:#263944;color:var(--text);border:1px solid #40535f}.buttons{display:flex;gap:8px;flex-wrap:wrap}.buttons>*{flex:1}.result{background:#0e171e;border-radius:12px;padding:15px;display:grid;gap:10px}.result .big{font-size:31px;font-weight:800;letter-spacing:-.7px}.good{color:var(--accent)}.bad{color:var(--bad)}.warn{color:var(--warn)}.row{display:flex;justify-content:space-between;gap:12px;font-size:14px}.row span:first-child{color:var(--muted)}.small{font-size:12px;color:var(--muted);line-height:1.45}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#263944;font-size:12px;margin-bottom:8px}.saved-item{border-top:1px solid var(--line);padding:12px 0;display:grid;gap:6px}.saved-item:first-child{border-top:0}.saved-item strong{font-size:15px}.saved-item .row{font-size:13px}.empty{color:var(--muted);font-size:13px}.notice{border-left:3px solid var(--warn);padding-left:10px}.foot{text-align:center;color:var(--muted);font-size:11px;padding:0 12px 24px}
+@media(max-width:430px){.grid{grid-template-columns:1fr 1fr}.panel{padding:13px}header{padding-top:20px}.result .big{font-size:28px}}
+</style>
+</head>
+<body>
+<header><h1>🚗 Fahrzeug-Deal</h1><p>Deal-Scanner & Gewinnrechner · Österreich + Import · Einkauf bis 5.000 €</p></header>
+<main>
+<section class="panel">
+<h2>1. Inserat & Fahrzeug</h2>
+<div class="grid">
+<div class="field full"><label for="name">Fahrzeug / Modell</label><input id="name" placeholder="z. B. Audi A6 3.0 TDI"></div>
+<div class="field"><label for="year">Erstzulassung</label><input id="year" type="number" placeholder="2012"></div>
+<div class="field"><label for="km">Kilometerstand</label><input id="km" type="number" placeholder="245000"></div>
+<div class="field"><label for="country">Herkunft</label><select id="country"><option value="at">Österreich</option><option value="eu">EU-Import</option><option value="other">Außerhalb EU</option></select></div>
+<div class="field"><label for="price">Einkaufspreis (€)</label><input id="price" type="number" min="0" value="3000"></div>
+<div class="field full"><label for="url">Inserat-Link (optional)</label><input id="url" type="url" placeholder="https://..."></div>
+</div>
+<div class="buttons" style="margin-top:12px">
+<a class="button secondary" href="https://www.willhaben.at/iad/gebrauchtwagen/auto/gebrauchtwagenboerse" target="_blank" rel="noopener">Willhaben öffnen</a>
+<a class="button secondary" href="https://www.ebay.at/sch/i.html?_nkw=auto" target="_blank" rel="noopener">eBay öffnen</a>
+</div>
+<p class="small" style="margin-bottom:0">Diese erste Version öffnet die Marktplätze zur Suche. Sie scrapt keine Inserate automatisch; dafür braucht es eine erlaubte API/Datenschnittstelle oder eine rechtlich zulässige Integration.</p>
+</section>
+<section class="panel">
+<h2>2. Gesamtkosten realistisch kalkulieren</h2>
+<div class="grid">
+<div class="field"><label for="resale">Realistischer Verkaufspreis (€)</label><input id="resale" type="number" value="6500"></div>
+<div class="field"><label for="repair">Reparaturen (€)</label><input id="repair" type="number" value="400"></div>
+<div class="field"><label for="prep">Aufbereitung / Pickerl (€)</label><input id="prep" type="number" value="200"></div>
+<div class="field"><label for="transport">Transport (€)</label><input id="transport" type="number" value="0"></div>
+<div class="field"><label for="nova">NoVA (Import) (€)</label><input id="nova" type="number" value="0"></div>
+<div class="field"><label for="import">Import / Typisierung / Zulassung (€)</label><input id="import" type="number" value="150"></div>
+<div class="field"><label for="fees">Sonstige Gebühren (€)</label><input id="fees" type="number" value="100"></div>
+<div class="field"><label for="buffer">Risikopuffer (€)</label><input id="buffer" type="number" value="300"></div>
+<div class="field full"><label for="minprofit">Mindestgewinn-Ziel (€)</label><input id="minprofit" type="number" value="2000"></div>
+</div>
+<p class="small notice">NoVA ist hier ein manuell einzutragender Betrag, keine amtliche Berechnung. Bei Importen vor Kauf anhand Fahrzeugdaten, Erstzulassung, CO₂-Wert, Bewertungsgrundlage und aktueller Rechtslage prüfen. Steuern, Gewährleistungsrisiko und Finanzierung können den tatsächlichen Gewinn weiter senken.</p>
+</section>
+<section class="panel">
+<h2>3. Deal-Bewertung</h2>
+<div class="result">
+<div><span id="status" class="pill">Wird berechnet</span><div id="profit" class="big">€ 2.350</div><div class="small">Geschätzter Überschuss vor Steuern und nicht erfassten Kosten</div></div>
+<div class="row"><span>Gesamtkosten inkl. Puffer</span><strong id="costs">€ 4.150</strong></div>
+<div class="row"><span>Maximaler Einkauf für Zielgewinn</span><strong id="maxbuy">€ 2.650</strong></div>
+<div class="row"><span>Abstand zum Gewinnziel</span><strong id="gap">+ € 350</strong></div>
+<div class="row"><span>Einkaufslimit</span><strong id="limit">Innerhalb 5.000 €</strong></div>
+</div>
+<div class="buttons" style="margin-top:12px">
+<button id="save">Deal speichern</button><button id="reset" class="secondary">Zurücksetzen</button>
+</div>
+</section>
+<section class="panel">
+<h2>4. Gespeicherte Deals</h2><div id="saved"><p class="empty">Noch keine Deals gespeichert.</p></div>
+</section>
+<section class="panel">
+<h2>So funktioniert der nächste Ausbauschritt</h2>
+<p class="small">Der Rechner filtert nach deinem Ziel, aber ein hoher rechnerischer Gewinn ist keine Garantie. Der Verkaufspreis sollte aus mehreren wirklich vergleichbaren Inseraten abgeleitet werden (Motorisierung, Baujahr, Kilometer, Zustand, Pickerl und Ausstattung). Für automatische Inseratserkennung ist eine Plattform-Schnittstelle nötig; keine Zugangsdaten oder privaten Kontodaten in diese App eingeben.</p>
+</section>
+</main>
+<div class="foot">Fahrzeug-Deal · lokale Speicherung auf diesem Gerät · keine Angebote werden automatisch verifiziert</div>
+<script>
+const ids=['name','year','km','country','price','url','resale','repair','prep','transport','nova','import','fees','buffer','minprofit'];
+const $=id=>document.getElementById(id);
+const money=n=>new Intl.NumberFormat('de-AT',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n||0);
+const num=id=>Math.max(0,Number($(id).value)||0);
+function calc(){
+ const price=num('price'), resale=num('resale');
+ const costs=price+num('repair')+num('prep')+num('transport')+num('nova')+num('import')+num('fees')+num('buffer');
+ const profit=resale-costs, target=num('minprofit'), maxbuy=resale-target-(costs-price);
+ $('profit').textContent=money(profit); $('profit').className='big '+(profit>=target?'good':profit>=0?'warn':'bad');
+ $('costs').textContent=money(costs); $('maxbuy').textContent=money(Math.max(0,maxbuy));
+ $('gap').textContent=(profit-target>=0?'+ ':'− ')+money(Math.abs(profit-target));
+ $('gap').className=profit>=target?'good':'bad';
+ $('limit').textContent=price<=5000?'Innerhalb 5.000 €':'Über 5.000 €';
+ $('limit').className=price<=5000?'good':'bad';
+ const status=$('status');
+ if(price>5000){status.textContent='ÜBER EINKAUFSLIMIT';status.style.background='#533039';}
+ else if(profit>=target){status.textContent='DEAL-KANDIDAT · Ziel erreicht';status.style.background='#174b3b';}
+ else if(profit>0){status.textContent='ZU WENIG GEWINN';status.style.background='#594724';}
+ else{status.textContent='VERLUST-RISIKO';status.style.background='#533039';}
+ return {costs,profit,maxbuy,target};
+}
+ids.forEach(id=>$(id).addEventListener('input',calc));
+function getDeal(){let d={};ids.forEach(id=>d[id]=$(id).value);let c=calc();d.profit=c.profit;d.costs=c.costs;d.created=new Date().toLocaleDateString('de-AT');return d}
+function readSaved(){try{return JSON.parse(localStorage.getItem('fahrzeugDeals')||'[]')}catch(e){return []}}
+function writeSaved(a){localStorage.setItem('fahrzeugDeals',JSON.stringify(a));renderSaved()}
+function renderSaved(){
+ const a=readSaved(), el=$('saved'); if(!a.length){el.innerHTML='<p class="empty">Noch keine Deals gespeichert.</p>';return}
+ el.innerHTML=a.map((d,i)=>`<div class="saved-item"><strong>${escapeHtml(d.name||'Unbenanntes Fahrzeug')}</strong><div class="row"><span>Einkauf ${money(+d.price)}</span><strong class="${d.profit>=d.minprofit?'good':'bad'}">${money(d.profit)} kalkuliert</strong></div><div class="row"><span>${escapeHtml(d.country==='at'?'Österreich':d.country==='eu'?'EU-Import':'Außerhalb EU')} · ${escapeHtml(d.km||'–')} km · ${d.created}</span><span></span></div><div class="buttons">${d.url?`<a class="button secondary" target="_blank" rel="noopener" href="${safeUrl(d.url)}">Inserat öffnen</a>`:''}<button class="secondary" onclick="loadDeal(${i})">Laden</button><button class="secondary" onclick="deleteDeal(${i})">Löschen</button></div></div>`).join('');
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function safeUrl(s){try{let u=new URL(s);return ['http:','https:'].includes(u.protocol)?u.href:'#'}catch(e){return '#'}}
+window.loadDeal=i=>{let d=readSaved()[i];ids.forEach(id=>$(id).value=d[id]??'');calc();window.scrollTo({top:0,behavior:'smooth'})};
+window.deleteDeal=i=>{let a=readSaved();a.splice(i,1);writeSaved(a)};
+$('save').addEventListener('click',()=>{const d=getDeal();if(!d.name.trim()){alert('Bitte zuerst Fahrzeug/Modell eintragen.');return}let a=readSaved();a.unshift(d);writeSaved(a);alert('Deal wurde auf diesem Gerät gespeichert.')});
+$('reset').addEventListener('click',()=>{if(confirm('Eingaben zurücksetzen?')){location.reload()}});
+if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(()=>{});
+calc();renderSaved();
+</script>
+</body></html>
